@@ -1,0 +1,28 @@
+E_bar(i+1,1,:)=E(i,1,:)-(de/dn)*(F(i,1+1,:)-F(i,1,:));
+%% decoding for predictor %%
+v=E_bar(i+1,1,3)/E_bar(i+1,1,1);
+Ht=(gamma/(gamma-1)) *( E_bar(i+1,1,2)-(E_bar(i+1,1,1)*u)/(E_bar(i+1,1,1)/u)) +(u^2+v^2)/2;
+u=(gamma/(gamma+1))*(E_bar(i+1,1,2)/E_bar(i+1,1,1))+  sqrt( ((gamma*E_bar(i+1,1,2))/((gamma+1)*E_bar(i+1,1,1)))^2 - ((gamma-1)/(gamma+1)) *(2*Ht-v^2));
+p=E_bar(i+1,1,2)-u*E_bar(i+1,1,1);
+rho=E_bar(i+1,1,1)/u;
+
+%% encoding for predictor %%
+F_bar(i+1,1,1)=rho*v;
+F_bar(i+1,1,3)=rho*v^2+p;
+F_bar(i+1,1,2)=rho*u*v;
+
+%%  Corrector
+
+ E(i+1,1,:)=0.5*(( E(i,1,:)+E_bar(i+1,1,:))   - (de/dn)*(F_bar(i+1,1+1,:)-F_bar(i+1,1,:)));
+ 
+ %% decoding for predictor %%
+v=E(i+1,1,3)/E(i+1,1,1);
+Ht=(gamma/(gamma-1)) *( E(i+1,1,2)-(E(i+1,1,1)*u)/(E(i+1,1,1)/u)) +(u^2+v^2)/2;
+u=(gamma/(gamma+1))*(E(i+1,1,2)/E(i+1,1,1))+  sqrt( ((gamma*E_bar(i+1,1,2))/((gamma+1)*E(i+1,1,1)))^2 - ((gamma-1)/(gamma+1)) *(2*Ht-v^2));
+p=E(i+1,1,2)-u*E(i+1,1,1);
+rho=E(i+1,1,1)/u;
+
+%% encoding for predictor %%
+F(i+1,1,1)=rho*v;
+F(i+1,1,3)=rho*v^2+p;
+F(i+1,1,2)=rho*u*v;
